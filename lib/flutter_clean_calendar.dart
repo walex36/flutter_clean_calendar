@@ -1,3 +1,5 @@
+library flutter_clean_calendar;
+
 export 'src/calendar_tile.dart';
 export 'src/date_picker_config.dart';
 export 'src/date_utils.dart';
