@@ -1,18 +1,18 @@
 library flutter_neat_and_clean_calendar;
 
 import 'package:flutter/material.dart';
-import './date_utils.dart';
-import './simple_gesture_detector.dart';
-import './calendar_tile.dart';
-import './neat_and_clean_calendar_event.dart';
+import 'src/date_utils.dart';
+import 'src/simple_gesture_detector.dart';
+import 'src/calendar_tile.dart';
+import 'src/neat_and_clean_calendar_event.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'date_picker_config.dart';
-import 'platform_widgets.dart';
+import 'src/date_picker_config.dart';
+import 'src/platform_widgets.dart';
 
 // Export NeatCleanCalendarEvent for using it in the application
-export './neat_and_clean_calendar_event.dart';
+export 'src/neat_and_clean_calendar_event.dart';
 
 typedef DayBuilder = Function(BuildContext context, DateTime day);
 typedef EventListBuilder = Function(
