@@ -359,6 +359,18 @@ class CalendarState extends State<Calendar> {
   }
 
   Widget get calendarGridView {
+    double aspectRation = 0;
+
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+      aspectRation = (MediaQuery.of(context).size.height /
+              MediaQuery.of(context).size.width) *
+          13;
+    } else {
+      aspectRation = (MediaQuery.of(context).size.height /
+              MediaQuery.of(context).size.width) *
+          0.8;
+    }
+
     return SimpleGestureDetector(
       onSwipeUp: _onSwipeUp,
       onSwipeDown: _onSwipeDown,
@@ -371,7 +383,7 @@ class CalendarState extends State<Calendar> {
       ),
       child: Column(children: <Widget>[
         GridView.count(
-          childAspectRatio: 1.5,
+          childAspectRatio: aspectRation,
           primary: false,
           shrinkWrap: true,
           crossAxisCount: 7,
@@ -533,6 +545,7 @@ class CalendarState extends State<Calendar> {
   }
 
   Widget get eventList {
+    final orientation = MediaQuery.of(context).orientation;
     // If eventListBuilder is provided, use it to build the list of events to show.
     // Otherwise use the default list of events.
     if (widget.eventListBuilder == null) {
@@ -593,12 +606,18 @@ class CalendarState extends State<Calendar> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall),
-                                  const SizedBox(
-                                    height: 10.0,
+                                  SizedBox(
+                                    height: orientation == Orientation.portrait
+                                        ? 10.0
+                                        : 0,
                                   ),
-                                  Text(
-                                    event.description,
-                                    overflow: TextOverflow.ellipsis,
+                                  Visibility(
+                                    visible:
+                                        orientation == Orientation.portrait,
+                                    child: Text(
+                                      event.description,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   )
                                 ],
                               ),
@@ -629,15 +648,28 @@ class CalendarState extends State<Calendar> {
     }
   }
 
-  Column singleDayTimeWidget(String start, String end) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(start, style: Theme.of(context).textTheme.bodyLarge),
-        Text(end, style: Theme.of(context).textTheme.bodyLarge),
-      ],
-    );
+  Widget singleDayTimeWidget(String start, String end) {
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(start, style: Theme.of(context).textTheme.bodyLarge),
+          SizedBox(
+            width: 10,
+          ),
+          Text(end, style: Theme.of(context).textTheme.bodyLarge),
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(start, style: Theme.of(context).textTheme.bodyLarge),
+          Text(end, style: Theme.of(context).textTheme.bodyLarge),
+        ],
+      );
+    }
   }
 
   @override

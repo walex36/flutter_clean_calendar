@@ -72,6 +72,17 @@ class NeatCleanCalendarTile extends StatelessWidget {
   /// the header row or a date tile for each day of a week or a month. The property [isDayOfWeek]
   /// of the [NeatCleanCalendarTile] decides, if the rendered item should be a day or a date tile.
   Widget renderDateOrDayOfWeek(BuildContext context) {
+    double aspectRation = 0;
+
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+      aspectRation = (MediaQuery.of(context).size.height /
+              MediaQuery.of(context).size.width) *
+          13;
+    } else {
+      aspectRation = (MediaQuery.of(context).size.height /
+              MediaQuery.of(context).size.width) *
+          4;
+    }
     // We decide, if this calendar tile should display a day name in the header row. If this is the
     // case, we return a widget, that contains a text widget with style property [dayOfWeekStyle]
     if (isDayOfWeek) {
@@ -113,7 +124,7 @@ class NeatCleanCalendarTile extends StatelessWidget {
                 Text(
                   date != null ? DateFormat("d").format(date!) : '',
                   style: TextStyle(
-                      fontSize: 14.0,
+                      fontSize: aspectRation * 2,
                       fontWeight: FontWeight.w400,
                       color: isSelected && date != null
                           ? Colors.white
@@ -135,8 +146,8 @@ class NeatCleanCalendarTile extends StatelessWidget {
                           return Container(
                             margin: const EdgeInsets.only(
                                 left: 2.0, right: 2.0, top: 1.0),
-                            width: 5.0,
-                            height: 5.0,
+                            width: aspectRation * 0.6,
+                            height: aspectRation * 0.6,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 // If event is done (isDone == true) set the color of the dots to
