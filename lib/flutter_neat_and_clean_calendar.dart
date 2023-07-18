@@ -1,5 +1,7 @@
 library flutter_neat_and_clean_calendar;
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'src/date_utils.dart';
 import 'src/simple_gesture_detector.dart';
@@ -124,6 +126,7 @@ class Calendar extends StatefulWidget {
   final TextStyle? displayMonthTextStyle;
   final DatePickerConfig? datePickerConfig;
   final double? eventTileHeight;
+  final double? heightCalendar;
 
   /// Configures the date picker if enabled
 
@@ -164,6 +167,7 @@ class Calendar extends StatefulWidget {
     this.displayMonthTextStyle,
     this.datePickerConfig,
     this.eventTileHeight,
+    this.heightCalendar = 400,
   });
 
   @override
@@ -359,18 +363,6 @@ class CalendarState extends State<Calendar> {
   }
 
   Widget get calendarGridView {
-    double aspectRation = 0;
-
-    if (MediaQuery.of(context).orientation == Orientation.landscape) {
-      aspectRation = (MediaQuery.of(context).size.height /
-              MediaQuery.of(context).size.width) *
-          13;
-    } else {
-      aspectRation = (MediaQuery.of(context).size.height /
-              MediaQuery.of(context).size.width) *
-          0.8;
-    }
-
     return SimpleGestureDetector(
       onSwipeUp: _onSwipeUp,
       onSwipeDown: _onSwipeDown,
@@ -381,16 +373,18 @@ class CalendarState extends State<Calendar> {
         horizontalThreshold: 40.0,
         swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
       ),
-      child: Column(children: <Widget>[
-        GridView.count(
-          childAspectRatio: aspectRation,
-          primary: false,
-          shrinkWrap: true,
-          crossAxisCount: 7,
-          padding: const EdgeInsets.only(bottom: 0.0),
-          children: calendarBuilder(),
-        ),
-      ]),
+      child: SizedBox(
+        width: widget.heightCalendar,
+        child: Column(children: <Widget>[
+          GridView.count(
+            primary: false,
+            shrinkWrap: true,
+            crossAxisCount: 7,
+            padding: const EdgeInsets.only(bottom: 0.0),
+            children: calendarBuilder(),
+          ),
+        ]),
+      ),
     );
   }
 
@@ -649,27 +643,14 @@ class CalendarState extends State<Calendar> {
   }
 
   Widget singleDayTimeWidget(String start, String end) {
-    if (MediaQuery.of(context).orientation == Orientation.landscape) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(start, style: Theme.of(context).textTheme.bodyLarge),
-          SizedBox(
-            width: 10,
-          ),
-          Text(end, style: Theme.of(context).textTheme.bodyLarge),
-        ],
-      );
-    } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(start, style: Theme.of(context).textTheme.bodyLarge),
-          Text(end, style: Theme.of(context).textTheme.bodyLarge),
-        ],
-      );
-    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(start, style: Theme.of(context).textTheme.bodyLarge),
+        Text(end, style: Theme.of(context).textTheme.bodyLarge),
+      ],
+    );
   }
 
   @override
